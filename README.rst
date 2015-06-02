@@ -6,7 +6,7 @@ AstrOmatic Wrapper
     :alt: Powered by Astropy Badge
 
 Astromatic-Wrapper is a package for running python pipelines that depend on 
-the `Astromatic Software Suite.`_. The package mainly consists of an API to 
+the `Astromatic Software Suite`_. The package mainly consists of an API to 
 allow the user to run AstrOmatic codes such as `SExtractor`_, `SCAMP`_, `SWarp`_, 
 `PSFEx`_, etc. from python scripts that make it easy to modify the configuration
 files and parameters used.

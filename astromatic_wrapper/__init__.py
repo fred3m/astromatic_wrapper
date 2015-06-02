@@ -1,7 +1,10 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
 """
-This is an Astropy affiliated package.
+Astromatic-Wrapper
+==================
+
+This Package is a wrapper for E. Bertin's AstrOmatic Software suite
 """
 
 # Affiliated packages may add whatever they like to this file, but

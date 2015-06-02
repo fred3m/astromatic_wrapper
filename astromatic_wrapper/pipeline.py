@@ -12,8 +12,8 @@ from six import string_types
 import datetime
 from astropy.io import fits
 
-from astromatic import api
-from astromatic.utils import utils
+from astromatic_wrapper import api
+from astromatic_wrapper.utils import utils
 
 logger = logging.getLogger('astromatic.pipeline')
 

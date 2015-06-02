@@ -8,9 +8,9 @@ import os
 import logging
 import warnings
 
-from astromatic.utils import utils
+from astromatic_wrapper.utils import utils
 
-logger = getLogger('astromatic.api')
+logger = logging.getLogger('astromatic.api')
 
 codes = {
     'Eye': 'eye', 
@@ -25,7 +25,7 @@ codes = {
     'WeightWatcher': 'ww'
 }
 
-class ApiError(utils.ApiError):
+class ApiError(utils.AstromaticError):
     pass
 
 class Astromatic:

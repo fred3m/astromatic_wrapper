@@ -363,11 +363,11 @@ class Astromatic:
                 else:
                     all_warnings = vstack([all_warnings, warnings])
         
-    result = {
-        'status': 'success',
-        'warnings': all_warnings
-    }
-    return result
+        result = {
+            'status': 'success',
+            'warnings': all_warnings
+        }
+        return result
     
     def get_version(self, cmd=None):
         """

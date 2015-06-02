@@ -351,7 +351,7 @@ class Pipeline:
         if pipeline_steps is None:
             pipeline_steps = self.steps
         
-        steps = [step for step in pipeline steps if
+        steps = [step for step in pipeline_steps if
             (len(run_tags) == 0 or any([tag in run_tags for tag in self.tags])) and
             not any([tag in ignore_tags for tag in self.tags])]
         
@@ -371,7 +371,7 @@ class Pipeline:
                 result = {
                     'status': 'error',
                     'function_result': result,
-                    'warnings': all_warnings
+                    'warnings': all_warnings,
                     'log': log
                 }
                 return result
@@ -387,7 +387,7 @@ class PipelineStep:
     A single step in the pipeline. This takes a function and a set of tags and kwargs
     associated with it and stores them in the pipeline.
     """
-    def __init__(self, func, step_id, tags=[], func_kwargs):
+    def __init__(self, func, step_id, tags=[], func_kwargs={}):
         """
         Initialize a PipelineStep object
         

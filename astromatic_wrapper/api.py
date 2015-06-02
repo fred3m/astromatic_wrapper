@@ -1,14 +1,16 @@
+# Copyright 2015 Fred Moolekamp
+# BSD 3-clause license
 """
 API for E. Bertin's Astromatic software suite
 """
-from __future__ import division
-from toyz.utils.errors import ToyzError
 import subprocess
 import os
 import logging
 import warnings
 
-logger = getLogger('astrotoyz.astromatic.api')
+from astromatic.utils import utils
+
+logger = getLogger('astromatic.api')
 
 codes = {
     'Eye': 'eye', 
@@ -23,79 +25,8 @@ codes = {
     'WeightWatcher': 'ww'
 }
 
-class AstromaticError(ToyzError):
+class ApiError(utils.ApiError):
     pass
-
-def convert_hdu_to_ldac(hdu):
-    """
-    Convert an hdu table to a fits_ldac table (format used by astromatic suite)
-    
-    Parameters
-    ----------
-    hdu: `astropy.io.fits.BinTableHDU` or `astropy.io.fits.TableHDU`
-        HDUList to convert to fits_ldac HDUList
-    
-    Returns
-    -------
-    tbl1: `astropy.io.fits.BinTableHDU`
-        Header info for fits table (LDAC_IMHEAD)
-    tbl2: `astropy.io.fits.BinTableHDU`
-        Data table (LDAC_OBJECTS)
-    """
-    from astropy.io import fits
-    import numpy as np
-    tblhdr = np.array([hdu.header.tostring(',')])
-    col1 = fits.Column(name='Field Header Card', array=tblhdr, format='13200A')
-    cols = fits.ColDefs([col1])
-    tbl1 = fits.BinTableHDU.from_columns(cols)
-    tbl1.header['TDIM1'] = '(80, {0})'.format(len(hdu.header))
-    tbl1.header['EXTNAME'] = 'LDAC_IMHEAD'
-    tbl2 = fits.BinTableHDU(hdu.data)
-    tbl2.header['EXTNAME'] = 'LDAC_OBJECTS'
-    return (tbl1, tbl2)
-
-def convert_table_to_ldac(tbl):
-    """
-    Convert an astropy table to a fits_ldac
-    
-    Parameters
-    ----------
-    tbl: `astropy.table.Table`
-        Table to convert to ldac format
-    Returns
-    -------
-    hdulist: `astropy.io.fits.HDUList`
-        FITS_LDAC hdulist that can be read by astromatic software
-    """
-    from astropy.io import fits
-    import tempfile
-    f = tempfile.NamedTemporaryFile(suffix='.fits', mode='rb+')
-    tbl.write(f, format='fits')
-    f.seek(0)
-    hdulist = fits.open(f, mode='update')
-    tbl1, tbl2 = convert_hdu_to_ldac(hdulist[1])
-    new_hdulist = [hdulist[0], tbl1, tbl2]
-    new_hdulist = fits.HDUList(new_hdulist)
-    return new_hdulist
-
-def get_table_from_ldac(filename, frame=1):
-    """
-    Load an astropy table from a fits_ldac by frame (Since the ldac format has column 
-    info for odd tables, giving it twce as many tables as a regular fits BinTableHDU,
-    match the frame of a table to its corresponding frame in the ldac file).
-    
-    Parameters
-    ----------
-    filename: str
-        Name of the file to open
-    frame: int
-        Number of the frame in a regular fits file
-    """
-    from astropy.table import Table
-    if frame>0:
-        frame = frame*2
-    tbl = Table.read(filename, hdu=frame)
-    return tbl
 
 class Astromatic:
     """
@@ -172,13 +103,13 @@ class Astromatic:
         if kwargs['code']=='SExtractor':
             if 'PARAMETERS_NAME' not in kwargs['config']:
                 if 'temp_path' not in kwargs:
-                    raise AstromaticError(
+                    raise ApiError(
                         "You must either supply a 'PARAMETERS_NAME' in 'config' or "+
                         "a 'temp_path' to store the temporary parameters file")
                 param_name = os.path.join(kwargs['temp_path'], 'sex.param')
                 f = open(param_name, 'w')
                 if 'params' not in kwargs:
-                    raise AstromaticError(
+                    raise ApiError(
                         "To run SExtractor yo must either supply a 'params' list of parameters "+
                         "or a config keyword 'PARAMETERS_NAME' that points to a parameters file")
                 for p in kwargs['params']:
@@ -188,7 +119,7 @@ class Astromatic:
         # Get the correct command for the given code (if one is not specified)
         if 'cmd' not in kwargs:
             if kwargs['code'] not in codes:
-                raise AstromaticError(
+                raise ApiError(
                     "You must either supply a valid astromatic 'code' name or "+
                     "a 'cmd' to run")
             cmd = codes[kwargs['code']]
@@ -281,7 +212,7 @@ class Astromatic:
             error_msg = "Error in '{0}' execution".format(self.code)
             if 'error_msg' in result:
                 error_msg += ': {0}'.format(result['error_msg'])
-            raise AstromaticError(error_msg)
+            raise ApiError(error_msg)
         return result
     
     def run(self, filenames, store_output=False, raise_error=True, **kwargs):
@@ -391,7 +322,7 @@ class Astromatic:
             if 'WEIGHTOUT_NAME' in kwargs['config']:
                 weight_img = kwargs['config']['WEIGHTOUT_NAME']
         else:
-            raise AstromaticError("The code you have specified is not currently supported "
+            raise ApiError("The code you have specified is not currently supported "
                 "using individual frames")
         if('WRITE_XML' in kwargs['config'] and kwargs['config']['WRITE_XML'] and
                 'XML_NAME' in kwargs['config']):
@@ -460,7 +391,7 @@ class Astromatic:
         # Get the correct command for the given code (if one is not specified)
         if cmd is None:
             if self.code not in codes:
-                raise AstromaticError(
+                raise ApiError(
                     "You must either supply a valid astromatic 'code' name or a 'cmd'")
             cmd = codes[self.code]
         if cmd[-1]!=' ':

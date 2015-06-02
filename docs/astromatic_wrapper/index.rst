@@ -1,9 +1,6 @@
+******************
 AstrOmatic Wrapper
-==================
-
-.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
-    :target: http://www.astropy.org
-    :alt: Powered by Astropy Badge
+******************
 
 Astromatic-Wrapper is a package for running python pipelines that depend on 
 the `Astromatic Software Suite.`_. The package mainly consists of an API to 
@@ -15,12 +12,10 @@ It also contains a Pipeline class for building custom pipelines that include
 AstrOmatic codes that can be used to process large datasets.
 
 
-Status reports for developers
------------------------------
+Reference/API
+=============
 
-.. image:: https://travis-ci.org/astropy/package-template.png?branch=master
-    :target: https://travis-ci.org/astropy/package-template
-    :alt: Test Status
+.. automodapi:: astromatic_wrapper
 
 .. _Astromatic Software Suite: http://www.astromatic.net/
 

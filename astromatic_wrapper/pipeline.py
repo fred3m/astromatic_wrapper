@@ -62,8 +62,6 @@ class Pipeline:
         # Set the time that the pipeline was created and create a directory
         # for log files
         self.log_path = log_path
-        
-        logger.info(self.log_path)
     
     def run_sex(self, step_id, files, api_kwargs={}, frames=None):
         """

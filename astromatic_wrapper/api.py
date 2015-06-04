@@ -145,7 +145,7 @@ class Astromatic:
             cmd += ' -'+param+' '+val
         return (cmd, kwargs)
     
-    def _run_cmd(self, this_cmd, store_output=False, xml_name=None, raise_error=True):
+    def _run_cmd(self, this_cmd, store_output=False, xml_name=None, raise_error=True, frame=None):
         """
         Execute a command to run an astromatic code. Since this allows a user to
         run any command on the host, it is recommended that no public
@@ -209,20 +209,26 @@ class Astromatic:
             # stream the output catalog to the votable. Since the output may
             # be a FITS_LDAC file, astropy does not rad this properly and it
             # causes the read to crash. This code removes the link to the FITS_LDAC file
+            if frame is not None:
+                xml_name = xml_name.replace('.xml','-{0}.xml'.format(frame))
             if self.code == 'SExtractor':
-                with open(xml_name.replace('.xml','-1.xml'),"r") as input:
-                    with open(xml_name,"w") as output: 
-                        for line in input:
-                            if '<fits' not in line.lower():
-                                output.write(line)
-                            elif '</DATA>' in line.upper():
-                                output.write('</DATA>\n')
-                #xml_name = xml_name.replace('-1.xml','.xml')
+                f = open(xml_name, 'r')
+                all_lines = f.readlines()
+                f.close()
+                f = open(xml_name, 'w')
+                for line in all_lines:
+                    if '<fits' not in line.lower():
+                        f.write(line)
+                    elif '</DATA>' in line.upper():
+                        f.write('</DATA>\n')
+                f.close()
             
-            # Astromatic codes add a '-' in the name of the XML file!
             from astropy.table import Table
-            result['warnings'] = Table.read(xml_name, table_id='Warnings', 
-                format='votable')
+            from astropy.io.votable import parse
+            # Sometimes the xml file does not fit the VOTABLE standard,
+            # so we mask the invalid parameters
+            votable = parse(xml_name, invalid='mask')
+            result['warnings'] = Table.read(votable, table_id='Warnings', format='votable')
             result['warnings'].meta['filename'] = xml_name
         # Raise an Exception if appropriate
         if result['status'] == 'error' and raise_error:
@@ -338,7 +344,7 @@ class Astromatic:
                 flag_img = kwargs['config']['FLAG_IMAGE']
             if 'WEIGHT_IMAGE' in kwargs['config']:
                 weight_img = kwargs['config']['WEIGHT_IMAGE']
-        elif kwargs['code'] == 'SWarp':
+        elif code == 'SWarp':
             if 'WEIGHTOUT_NAME' in kwargs['config']:
                 weight_img = kwargs['config']['WEIGHTOUT_NAME']
         else:
@@ -371,10 +377,10 @@ class Astromatic:
                 new_cmd = new_cmd.replace(xml_name, xml_name.replace(
                     '.xml', '-'+frame+'.xml'))
             # Run the code
-            result = self._run_cmd(new_cmd, False, xml_name, raise_error)
+            result = self._run_cmd(new_cmd, False, xml_name, raise_error, frame=frame)
             
             # Combine all warnings into a single table
-            if 'warnings' in result:
+            if 'warnings' in result and len(result['warnings'])>0:
                 from astropy.table import vstack
                 warnings = result['warnings']
                 warnings['frame'] = frame

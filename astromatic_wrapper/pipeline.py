@@ -9,7 +9,6 @@ import subprocess
 import copy
 import logging
 from six import string_types
-import datetime
 from astropy.io import fits
 
 from astromatic_wrapper import api
@@ -24,8 +23,8 @@ class PipelineError(utils.AstromaticError):
     pass
 
 class Pipeline:
-    def __init__(self, temp_path, build_paths={}, log_path=None, steps=[], nextid=0,
-            pipeline_name=None, create_paths=False, **kwargs):
+    def __init__(self, temp_path, build_paths={}, log_path=None, pipeline_name=None,
+            steps=[], nextid=0, create_paths=False, **kwargs):
         """
         Parameters
         ----------
@@ -49,6 +48,9 @@ class Pipeline:
         self.temp_path = temp_path
         self.build_paths = build_paths
         self.create_paths = create_paths
+        self.name = pipeline_name
+        self.steps = steps
+        self.next_id = 0
         
         # Set additional keyword arguements
         for key, value in kwargs.items():
@@ -57,18 +59,10 @@ class Pipeline:
         # If the temp path doesn't exist, give the user the option to create it
         utils.check_path(self.temp_path, create_paths)
         
-        # If the user specified a set of steps for the pipeline, add them here
-        self.steps = steps
-        self.next_id = 0
-        
         # Set the time that the pipeline was created and create a directory
         # for log files
-        self.name = pipeline_name
-        self.run_date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        self.log_path = os.path.join(self.log_path, self.run_date)
-        if pipeline_name is not None:
-            self.log_path += '_'+pipeline_name
-        utils.create_paths([self.log_path])
+        self.log_path = log_path
+        
         logger.info(self.log_path)
     
     def run_sex(self, step_id, files, api_kwargs={}, frames=None):
@@ -115,16 +109,17 @@ class Pipeline:
         if 'config' not in api_kwargs:
             api_kwargs['config'] = {}
         if 'CATALOG_NAME' not in api_kwargs['config']:
-            api_kwargs['config']['CATALOG_NAME'] = files['image'].replace('.fits', '.cat')
+            api_kwargs['config']['CATALOG_NAME'] = files['image'].replace('.fits', '.cat.fits')
         if 'FLAG_IMAGE' not in api_kwargs['config'] and 'dqmask' in files:
             api_kwargs['config']['FLAG_IMAGE'] = files['dqmask']
         if 'WEIGHT_IMAGE' not in api_kwargs['config'] and 'wtmap' in files:
             api_kwargs['config']['WEIGHT_IMAGE'] = files['wtmap']
-        if 'WRITE_XML' not in api_kwargs['config']:
-            api_kwargs['config']['WRITE_XML'] = 'Y'
-        if 'XML_NAME' not in api_kwargs['config']:
-            api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
-                '{0}.sex.log.xml'.format(step_id))
+        if self.log_path is not None:
+            if 'WRITE_XML' not in api_kwargs['config']:
+                api_kwargs['config']['WRITE_XML'] = 'Y'
+            if 'XML_NAME' not in api_kwargs['config']:
+                api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
+                    '{0}.sex.log.xml'.format(step_id))
         sex = api.Astromatic(**api_kwargs)
         if frames is None:
             result = sex.run(files['image'])
@@ -174,11 +169,12 @@ class Pipeline:
         if save_catalog is not None:
             api_kwargs['config']['SAVE_REFCATALOG'] = 'Y'
             api_kwargs['config']['REFOUT_CATPATH'] = save_catalog
-        if 'WRITE_XML' not in api_kwargs['config']:
-            api_kwargs['config']['WRITE_XML'] = 'Y'
-        if 'XML_NAME' not in api_kwargs['config']:
-            api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
-                '{0}.scamp.log.xml'.format(step_id))
+        if self.log_path is not None:
+            if 'WRITE_XML' not in api_kwargs['config']:
+                api_kwargs['config']['WRITE_XML'] = 'Y'
+            if 'XML_NAME' not in api_kwargs['config']:
+                api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
+                    '{0}.scamp.log.xml'.format(step_id))
         scamp = api.Astromatic(**api_kwargs)
         result = scamp.run(catalogs)
         return result
@@ -226,11 +222,12 @@ class Pipeline:
             api_kwargs['config']['RESAMPLE_DIR'] = api_kwargs['temp_path']
         if 'IMAGEOUT_NAME' not in api_kwargs['config']:
             raise PipelineError('Must include a name for the new stacked image')
-        if 'WRITE_XML' not in api_kwargs['config']:
-            api_kwargs['config']['WRITE_XML'] = 'Y'
-        if 'XML_NAME' not in api_kwargs['config']:
-            api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
-                '{0}.scamp.log.xml'.format(step_id))
+        if self.log_path is not None:
+            if 'WRITE_XML' not in api_kwargs['config']:
+                api_kwargs['config']['WRITE_XML'] = 'Y'
+            if 'XML_NAME' not in api_kwargs['config']:
+                api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
+                    '{0}.swarp.log.xml'.format(step_id))
         swarp = api.Astromatic(**api_kwargs)
         if frames is None:
             result = swarp.run(filenames)
@@ -274,11 +271,12 @@ class Pipeline:
             api_kwargs['temp_path'] = self.temp_path
         if 'config' not in api_kwargs:
             api_kwargs['config'] = {}
-        if 'WRITE_XML' not in api_kwargs['config']:
-            api_kwargs['config']['WRITE_XML'] = 'Y'
-        if 'XML_NAME' not in api_kwargs['config']:
-            api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
-                '{0}.psfex.log.xml'.format(step_id))
+        if self.log_path is not None:
+            if 'WRITE_XML' not in api_kwargs['config']:
+                api_kwargs['config']['WRITE_XML'] = 'Y'
+            if 'XML_NAME' not in api_kwargs['config']:
+                api_kwargs['config']['XML_NAME'] = os.path.join(self.log_path, 
+                    '{0}.psfex.log.xml'.format(step_id))
         psfex = api.Astromatic(**api_kwargs)
         result = psfex.run(catalogs)
         return result
@@ -309,11 +307,12 @@ class Pipeline:
                     func = self.run_scamp
                 elif func == 'PSFEx':
                     func = self.run_psfex
-                elif func == 'SWARP':
+                elif func == 'SWarp':
                     func = self.run_swarp
                 else:
                     raise PipelineError("You must either pass a function for the pipeline "
-                        "to run or the name of an astromatic code")
+                        "to run or the name of an astromatic code, "
+                        "'{0}' not recognized")
             else:
                 raise PipelineError("You must either pass a function for the pipeline "
                     "to run or the name of an astromatic code")
@@ -352,16 +351,17 @@ class Pipeline:
             pipeline_steps = self.steps
         
         steps = [step for step in pipeline_steps if
-            (len(run_tags) == 0 or any([tag in run_tags for tag in self.tags])) and
-            not any([tag in ignore_tags for tag in self.tags])]
+            (len(run_tags) == 0 or any([tag in run_tags for tag in step.tags])) and
+            not any([tag in ignore_tags for tag in step.tags])]
         
         all_warnings = None
         for step in steps:
-            result = step.func(step.ste_id, **step.func_kwargs)
-            if 'warnings' in result:
+            result = step.func(step.step_id, **step.func_kwargs)
+            if('warnings' in result and result['warnings'] is not None and
+                    len(result['warnings'])>0):
                 from astropy.table import vstack
                 warnings = result['warnings']
-                warnings['filename'] = result.meta['filename']
+                warnings['filename'] = result['warnings'].meta['filename']
                 warnings['step'] = step.step_id
                 if all_warnings is None:
                     all_warnings = warnings

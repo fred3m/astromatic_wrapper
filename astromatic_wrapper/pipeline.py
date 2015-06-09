@@ -218,8 +218,8 @@ class Pipeline:
             api_kwargs['config'] = {}
         if 'RESAMPLE_DIR' not in api_kwargs['config']:
             api_kwargs['config']['RESAMPLE_DIR'] = api_kwargs['temp_path']
-        if 'IMAGEOUT_NAME' not in api_kwargs['config']:
-            raise PipelineError('Must include a name for the new stacked image')
+        #if 'IMAGEOUT_NAME' not in api_kwargs['config']:
+        #    raise PipelineError('Must include a name for the new stacked image')
         if self.log_path is not None:
             if 'WRITE_XML' not in api_kwargs['config']:
                 api_kwargs['config']['WRITE_XML'] = 'Y'
@@ -269,6 +269,8 @@ class Pipeline:
             api_kwargs['temp_path'] = self.temp_path
         if 'config' not in api_kwargs:
             api_kwargs['config'] = {}
+        if 'PSF_DIR' not in api_kwargs['config']:
+            api_kwargs['config']['PSF_DIR'] = self.temp_path
         if self.log_path is not None:
             if 'WRITE_XML' not in api_kwargs['config']:
                 api_kwargs['config']['WRITE_XML'] = 'Y'
@@ -354,6 +356,7 @@ class Pipeline:
         
         all_warnings = None
         for step in steps:
+            logger.info('running step {0}: {1}'.format(step.step_id, step.tags))
             result = step.func(step.step_id, **step.func_kwargs)
             if('warnings' in result and result['warnings'] is not None and
                     len(result['warnings'])>0):

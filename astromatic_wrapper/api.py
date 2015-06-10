@@ -227,7 +227,7 @@ class Astromatic:
             from astropy.io.votable import parse
             # Sometimes the xml file does not fit the VOTABLE standard,
             # so we mask the invalid parameters
-            votable = parse(xml_name, invalid='mask')
+            votable = parse(xml_name, invalid='mask', pedantic=False)
             result['warnings'] = Table.read(votable, table_id='Warnings', format='votable')
             # Fill in the masked values (otherwise there are problems with 
             # pipeline pickling)

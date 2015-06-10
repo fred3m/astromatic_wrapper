@@ -104,7 +104,15 @@ setup(name=PACKAGENAME,
       version=VERSION,
       description=DESCRIPTION,
       scripts=scripts,
-      install_requires=['astropy'],
+      install_requires=['astropy>1.0'],
+      extras_require={
+          'all': [
+              'pandas>=0.14',
+              'astropy>=0.4',
+              'sqlalchemy',
+              'dill'
+          ]
+      },
       author=AUTHOR,
       author_email=AUTHOR_EMAIL,
       license=LICENSE,

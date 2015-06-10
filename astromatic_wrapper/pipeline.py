@@ -393,8 +393,16 @@ class Pipeline(object):
                     all_warnings = warnings
                 else:
                     all_warnings = vstack([all_warnings, warnings])
+                    # Some warning tables may have values not contained in other tables
+                    # dill has problems loading pipelines with masked astropy tables
+                    # so we fill the blank columns with a zero (usually frame in scamp)
+                    all_warnings = all_warnings.filled(0)
             if dill_dump:
                 # Save the pipeline in the log directory
+                if all_warnings.masked:
+                    print 'in pipeline'
+                    import IPython
+                    IPython.embed()
                 self.run_warnings = all_warnings
                 dill.dump(self, open(logfile, 'w'))
             if result['status'] == 'error':

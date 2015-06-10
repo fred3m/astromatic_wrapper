@@ -229,6 +229,9 @@ class Astromatic:
             # so we mask the invalid parameters
             votable = parse(xml_name, invalid='mask')
             result['warnings'] = Table.read(votable, table_id='Warnings', format='votable')
+            # Fill in the masked values (otherwise there are problems with 
+            # pipeline pickling)
+            result['warnings'] = result['warnings'].filled(0)
             result['warnings'].meta['filename'] = xml_name
         # Raise an Exception if appropriate
         if result['status'] == 'error' and raise_error:

@@ -22,7 +22,7 @@ class PipelineError(utils.AstromaticError):
     """
     pass
 
-class Pipeline:
+class Pipeline(object):
     def __init__(self, temp_path, build_paths={}, log_path=None, pipeline_name=None,
             steps=[], nextid=0, create_paths=False, **kwargs):
         """
@@ -51,6 +51,9 @@ class Pipeline:
         self.name = pipeline_name
         self.steps = steps
         self.next_id = 0
+        self.run_steps = None
+        self.run_warnings = None
+        self.run_step_idx = 0
         
         # Set additional keyword arguements
         for key, value in kwargs.items():
@@ -325,7 +328,7 @@ class Pipeline:
             kwargs
         ))
             
-    def run(self, run_tags=[], ignore_tags=[], pipeline_steps=None):
+    def run(self, run_tags=[], ignore_tags=[], pipeline_steps=None, run_name=None):
         """
         Run the pipeline given a list of PipelineSteps
         
@@ -342,22 +345,44 @@ class Pipeline:
             a set of steps to run. This can be useful if (for example) mulitple criteria
             are used to select steps to run and the user wants to perform these cuts in
             some other function to generate the necessary steps to run.
-        logfile: filename or file object
-            Keeps track of which steps have been run. Each time a step is run it is
-            logged in the log file so that if there is an error that causes the pipeline
-            to stop, the user can pick up where he/she left off.
+        run_name: str
+            Name of the current run. When a pipeline is run, if a ``logpath`` has been
+            specified then a copy of the pipline with a record of all warnings and
+            steps run is saved in the ``logpath`` directory. A ``run_name`` can be specified
+            to distinguish between different runs of the same pipeline with the same
+            ``logpath``.
         """
         if pipeline_steps is None:
             pipeline_steps = self.steps
         
-        steps = [step for step in pipeline_steps if
-            (len(run_tags) == 0 or any([tag in run_tags for tag in step.tags])) and
-            not any([tag in ignore_tags for tag in step.tags])]
+        # Filter steps to include steps with run_tags and exclude steps with ignore_tabs
+        if self.run_steps is None:
+            self.run_steps = [step for step in pipeline_steps if
+                (len(run_tags) == 0 or any([tag in run_tags for tag in step.tags])) and
+                not any([tag in ignore_tags for tag in step.tags])]
+        # Set the path of the logfile for the current run
+        dill_dump=False
+        if self.log_path is not None:
+            if run_name is None:
+                logfile = os.path.join(self.log_path, 'pipeline.p')
+            else:
+                logfile = os.path.join(self.log_path, 'pipeline-{0}.p'.format(run_name))
+            logger.info('Pipeline warnings will be stored in {0}'.format(logfile))
+            # Save the pipeline in the log directory
+            try:
+                import dill
+                dill_dump=True
+                dill.dump(self, open(logfile, 'w'))
+            except ImportError:
+                import warnings
+                warnings.warn('Pipeline requires "dill" to save log file')
         
+        steps = self.run_steps[self.run_step_idx:]
         all_warnings = None
         for step in steps:
             logger.info('running step {0}: {1}'.format(step.step_id, step.tags))
             result = step.func(step.step_id, **step.func_kwargs)
+            # Log any warnings and resave the log file in case the application crashes
             if('warnings' in result and result['warnings'] is not None and
                     len(result['warnings'])>0):
                 from astropy.table import vstack
@@ -368,6 +393,10 @@ class Pipeline:
                     all_warnings = warnings
                 else:
                     all_warnings = vstack([all_warnings, warnings])
+            if dill_dump:
+                # Save the pipeline in the log directory
+                self.run_warnings = all_warnings
+                dill.dump(self, open(logfile, 'w'))
             if result['status'] == 'error':
                 result = {
                     'status': 'error',
@@ -376,6 +405,7 @@ class Pipeline:
                     'log': log
                 }
                 return result
+            self.run_step_idx+=1
         
         result = {
             'status': 'success',

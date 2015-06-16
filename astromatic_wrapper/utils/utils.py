@@ -87,7 +87,7 @@ def check_path(path, auto_create=False):
         automatically be created, otherwise the user will be prompted to create the path
     """
     if not os.path.exists(path):
-        if get_bool("{0} '{1}' does not exist, create (y/n)?".format(pathname, path)):
+        if get_bool("'{0}' does not exist, create (y/n)?".format(path)):
             create_paths(path)
         else:
             raise AstromaticError("{0} does not exist".format(path))

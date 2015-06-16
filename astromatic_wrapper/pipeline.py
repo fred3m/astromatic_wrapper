@@ -65,6 +65,8 @@ class Pipeline(object):
         # Set the time that the pipeline was created and create a directory
         # for log files
         self.log_path = log_path
+        if log_path is not None:
+            utils.check_path(self.log_path, create_paths)
     
     def run_sex(self, step_id, files, api_kwargs={}, frames=None):
         """
@@ -399,7 +401,7 @@ class Pipeline(object):
                     all_warnings = all_warnings.filled(0)
             if dill_dump:
                 # Save the pipeline in the log directory
-                if all_warnings.masked:
+                if all_warnings is not None and all_warnings.masked:
                     print 'in pipeline'
                     import IPython
                     IPython.embed()

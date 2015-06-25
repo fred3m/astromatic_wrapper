@@ -354,14 +354,16 @@ class Pipeline(object):
             to distinguish between different runs of the same pipeline with the same
             ``logpath``.
         """
+        import inspect
         if pipeline_steps is None:
-            pipeline_steps = self.steps
-        
-        # Filter steps to include steps with run_tags and exclude steps with ignore_tabs
-        if self.run_steps is None:
-            self.run_steps = [step for step in pipeline_steps if
-                (len(run_tags) == 0 or any([tag in run_tags for tag in step.tags])) and
-                not any([tag in ignore_tags for tag in step.tags])]
+            # Filter steps to include steps with run_tags and exclude steps with ignore_tabs
+            if self.run_steps is None:
+                self.run_steps = [step for step in self.steps if
+                    (len(run_tags) == 0 or any([tag in run_tags for tag in step.tags])) and
+                    not any([tag in ignore_tags for tag in step.tags])]
+        else:
+            self.run_steps = pipeline_steps
+            self.run_step_idx = 0
         # Set the path of the logfile for the current run
         dill_dump=False
         if self.log_path is not None:
@@ -383,7 +385,15 @@ class Pipeline(object):
         all_warnings = None
         for step in steps:
             logger.info('running step {0}: {1}'.format(step.step_id, step.tags))
-            result = step.func(step.step_id, **step.func_kwargs)
+            # Some functions use step_id to keep track of log files, so the id of
+            # the current step is added to the funciton call, otherwise
+            # only the func_kwargs are added
+            if 'step_id' in inspect.getargspec(step.func).args:
+                result = step.func(step.step_id, **step.func_kwargs)
+            else:
+                result = step.func(**step.func_kwargs)
+                if result is None:
+                    result = {'status': 'success'}
             # Log any warnings and resave the log file in case the application crashes
             if('warnings' in result and result['warnings'] is not None and
                     len(result['warnings'])>0):

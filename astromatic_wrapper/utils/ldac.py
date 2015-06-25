@@ -57,6 +57,22 @@ def convert_table_to_ldac(tbl):
     new_hdulist = fits.HDUList(new_hdulist)
     return new_hdulist
 
+def save_table_as_ldac(tbl, filename, **kwargs):
+    """
+    Save a table as a fits LDAC file
+    
+    Parameters
+    ----------
+    tbl: `astropy.table.Table`
+        Table to save
+    filename: str
+        Filename to save table
+    kwargs:
+        Keyword arguments to pass to hdulist.write
+    """
+    hdulist = convert_table_to_ldac(tbl)
+    hdulist.write(filename, **kwargs)
+
 def get_table_from_ldac(filename, frame=1):
     """
     Load an astropy table from a fits_ldac by frame (Since the ldac format has column 

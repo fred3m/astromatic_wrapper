@@ -14,14 +14,14 @@ Contents:
 
 ** Using Pipelines **
 
-.. totree::
+.. toctree::
   :maxdepth: 3
   
   pipelines.rst
 
 ** More information **
 
-.. totree::
+.. toctree::
   :maxdepth: 3
   
   working_with.rst

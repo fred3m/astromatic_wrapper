@@ -1,10 +1,18 @@
 Astromatic-Wrapper: Version 0.1
 ===============================
 
-Contents:
+This is the documentation for the Astroquery affiliated package of 
+`astropy <astropy.org>`_.
+Code and issue tracker are on `GitHub <https://github.com/fred3m/astromatic_wrapper>`_.
 
-Introduction to Astromatic-Wrapper
-----------------------------------
+Introduction
+============
+
+Astromatic-Wrapper is a python wrapper for Emmanuel Bertin's `AstrOmatic <www.astromatic.net>`_
+software suite, incuding SExtractor, SCAMP, SWarp, and PSFex.
+
+Contents
+========
 
 .. toctree::
   :maxdepth: 3
@@ -12,19 +20,12 @@ Introduction to Astromatic-Wrapper
   overview.rst
   install.rst
   quick_start.rst
-
-Using Pipelines
----------------
-
-.. toctree::
-  :maxdepth: 3
-  
   pipelines.rst
-
-More information
-----------------
-
-.. toctree::
-  :maxdepth: 3
-  
   working_with.rst
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

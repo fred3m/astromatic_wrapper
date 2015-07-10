@@ -3,5 +3,5 @@
 # This sub-module is destined for common non-package specific utility
 # functions that will ultimately be merged into `astropy.utils`
 
-import ldac
-import utils
+import astromatic_wrapper.utils.ldac
+import astromatic_wrapper.utils.pipeline

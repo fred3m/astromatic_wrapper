@@ -17,6 +17,5 @@ from ._astropy_init import *
 if not _ASTROPY_SETUP_:
     from example_mod import *
 
-import api
-import pipeline
-import utils
+import astromatic_wrapper.api
+import astromatic_wrapper.utils

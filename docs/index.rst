@@ -1,27 +1,17 @@
-Astromatic-Wrapper: Version 0.1
-===============================
+Documentation
+=============
 
-Contents:
-
-**Introduction to Astromatic-Wrapper**
+This is an affiliated package for the AstroPy package. The documentation for
+this package is here:
 
 .. toctree::
-  :maxdepth: 3
+  :maxdepth: 2
 
-  overview.rst
-  install.rst
-  quick_start.rst
+  packagename/index.rst
 
-** Using Pipelines **
-
-.. totree::
-  :maxdepth: 3
-  
-  pipelines.rst
-
-** More information **
-
-.. totree::
-  :maxdepth: 3
-  
-  working_with.rst
+.. note:: The layout of this directory is simply a suggestion.  To follow
+          traditional practice, do *not* edit this page, but instead place
+          all documentation for the affiliated package inside ``packagename/``.
+          The traditional practice was intended to allow the affiliated
+          package to eventually be merged into the main astropy package.
+          You can follow this practice or choose your own layout.

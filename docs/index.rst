@@ -11,11 +11,14 @@ Introduction
 Astromatic-Wrapper is a python wrapper for Emmanuel Bertin's `AstrOmatic <www.astromatic.net>`_
 software suite, incuding SExtractor, SCAMP, SWarp, and PSFex.
 
-Contents
-========
+It also contains a Pipeline class for building custom pipelines that include 
+AstrOmatic codes that can be used to process large datasets.
+
+Introduction
+============
 
 .. toctree::
-  :maxdepth: 3
+  :maxdepth: 2
 
   overview.rst
   install.rst

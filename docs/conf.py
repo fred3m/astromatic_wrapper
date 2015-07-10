@@ -139,22 +139,6 @@ latex_documents = [('index', project + '.tex', project + u' Documentation',
 man_pages = [('index', project.lower(), project + u' Documentation',
               [author], 1)]
 
-
-## -- Options for the edit_on_github extension ----------------------------------------
-
-if eval(setup_cfg.get('edit_on_github')):
-    extensions += ['astropy_helpers.sphinx.ext.edit_on_github']
-
-    versionmod = __import__(setup_cfg['package_name'] + '.version')
-    edit_on_github_project = setup_cfg['github_project']
-    if versionmod.version.release:
-        edit_on_github_branch = "v" + versionmod.version.version
-    else:
-        edit_on_github_branch = "master"
-
-    edit_on_github_source_root = ""
-    edit_on_github_doc_root = "docs"
-
 ## -- Mock Modules for Read The Docs ------------------------------
 import sys
 # Python>=3.3 uses the following package
@@ -171,3 +155,18 @@ class Mock(MagicMock):
 
 MOCK_MODULES = ['numpy', 'pandas']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+## -- Options for the edit_on_github extension ----------------------------------------
+
+if eval(setup_cfg.get('edit_on_github')):
+    extensions += ['astropy_helpers.sphinx.ext.edit_on_github']
+
+    versionmod = __import__(setup_cfg['package_name'] + '.version')
+    edit_on_github_project = setup_cfg['github_project']
+    if versionmod.version.release:
+        edit_on_github_branch = "v" + versionmod.version.version
+    else:
+        edit_on_github_branch = "master"
+
+    edit_on_github_source_root = ""
+    edit_on_github_doc_root = "docs"

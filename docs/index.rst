@@ -3,7 +3,8 @@ Astromatic-Wrapper: Version 0.1
 
 Contents:
 
-**Introduction to Astromatic-Wrapper**
+Introduction to Astromatic-Wrapper
+----------------------------------
 
 .. toctree::
   :maxdepth: 3
@@ -12,14 +13,16 @@ Contents:
   install.rst
   quick_start.rst
 
-** Using Pipelines **
+Using Pipelines
+---------------
 
 .. toctree::
   :maxdepth: 3
   
   pipelines.rst
 
-** More information **
+More information
+----------------
 
 .. toctree::
   :maxdepth: 3

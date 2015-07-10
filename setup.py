@@ -104,7 +104,11 @@ setup(name=PACKAGENAME,
       version=VERSION,
       description=DESCRIPTION,
       scripts=scripts,
-      install_requires=['astropy>1.0'],
+      install_requires=[
+          'astropy>1.0', 
+          'numpy>=1.4.0', 
+          'pandas>=0.14'
+      ],
       extras_require={
           'all': ['dill']
       },

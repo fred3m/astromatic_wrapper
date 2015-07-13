@@ -14,6 +14,8 @@ files and parameters used.
 It also contains a Pipeline class for building custom pipelines that include
 AstrOmatic codes that can be used to process large datasets.
 
+See the full `documentation`_ for more information.
+
 
 Status reports for developers
 -----------------------------
@@ -33,3 +35,5 @@ Status reports for developers
 .. _SWarp: http://www.astromatic.net/software/swarp
 
 .. _PSFEx: http://www.astromatic.net/software/psfex
+
+.. _documentation: http://astromatic-wrapper.readthedocs.org/en/latest/

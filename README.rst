@@ -1,4 +1,4 @@
-AstrOmatic Wrapper
+Astromatic-Wrapper
 ==================
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
@@ -24,7 +24,8 @@ Status reports for developers
     :target: https://travis-ci.org/astropy/package-template
     :alt: Test Status
 
-.. image:: https://coveralls.io/repos/fred3m/astromatic_wrapper/badge.svg?branch=master&service=github :target: https://coveralls.io/github/fred3m/astromatic_wrapper?branch=master
+.. image:: https://coveralls.io/repos/fred3m/astromatic_wrapper/badge.svg?branch=master&service=github 
+    :target: https://coveralls.io/github/fred3m/astromatic_wrapper?branch=master
 
 .. _Astromatic Software Suite: http://www.astromatic.net/
 

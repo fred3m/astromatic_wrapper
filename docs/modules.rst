@@ -2,8 +2,7 @@
 Modules
 =======
 
-.. automodule:: astromatic_wrapper
-    :members:
-    :undoc-members:
-    :inherited-members:
-    :show-inheritance:
+.. toctree::
+    :maxdepth: 4
+    
+    astromatic_wrapper

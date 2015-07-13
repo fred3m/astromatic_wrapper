@@ -21,7 +21,7 @@ that give sample code to work with Pipelines.
 Setting up the Pipeline: Best Practices and Useful Tips
 =======================================================
 
-To assist in organizing your files, :py::class:`.Pipeline`'s accept a ``paths`` dictionary
+To assist in organizing your files, :class:`.Pipeline`'s accept a ``paths`` dictionary
 that lists where to store various file types. When the pipeline is created, the user will
 be prompted to create any paths that do not exist in the systems file directory (or
 optionally, they can automatically be created without prompting the user). At a minimum 

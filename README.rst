@@ -22,6 +22,8 @@ Status reports for developers
     :target: https://travis-ci.org/astropy/package-template
     :alt: Test Status
 
+.. image:: https://coveralls.io/repos/fred3m/astromatic_wrapper/badge.svg?branch=master&service=github :target: https://coveralls.io/github/fred3m/astromatic_wrapper?branch=master
+
 .. _Astromatic Software Suite: http://www.astromatic.net/
 
 .. _SExtractor: http://www.astromatic.net/software/sextractor

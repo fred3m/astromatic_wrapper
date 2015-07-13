@@ -1,7 +1,6 @@
 language: python
 
 python:
-    - 2.6
     - 2.7
     - 3.3
     - 3.4
@@ -37,8 +36,6 @@ matrix:
           env: ASTROPY_VERSION=development SETUP_CMD='test'
 
         # Try all python versions with the latest numpy
-        - python: 2.6
-          env: SETUP_CMD='test'
         - python: 2.7
           env: SETUP_CMD='test'
         - python: 3.3
@@ -92,6 +89,7 @@ install:
     # install since this ensures Numpy does not get automatically upgraded.
     # - if [[ $SETUP_CMD != egg_info ]]; then $CONDA_INSTALL numpy=$NUMPY_VERSION ... ; fi
     # - if [[ $SETUP_CMD != egg_info ]]; then $PIP_INSTALL ...; fi
+     - if [[ $SETUP_CMD != egg_info ]]; then $CONDA_INSTALL dill ; fi
 
     # DOCUMENTATION DEPENDENCIES
     # build_sphinx needs sphinx and matplotlib (for plot_directive). Note that
@@ -109,4 +107,4 @@ after_success:
     # If coveralls.io is set up for this package, uncomment the line
     # below and replace "packagename" with the name of your package.
     # The coveragerc file may be customized as needed for your package.
-    # - if [[ $SETUP_CMD == 'test --coverage' ]]; then coveralls --rcfile='packagename/tests/coveragerc'; fi
+     - if [[ $SETUP_CMD == 'test --coverage' ]]; then coveralls --rcfile='astrometry_wrapper/tests/coveragerc'; fi

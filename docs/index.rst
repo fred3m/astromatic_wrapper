@@ -14,7 +14,7 @@ software suite, incuding SExtractor, SCAMP, SWarp, and PSFex.
 It also contains a Pipeline class for building custom pipelines that include 
 AstrOmatic codes that can be used to process large datasets.
 
-Introduction
+Contents
 ============
 
 .. toctree::
@@ -25,6 +25,7 @@ Introduction
   quick_start.rst
   pipelines.rst
   working_with.rst
+  modules.rst
 
 Indices and tables
 ==================

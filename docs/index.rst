@@ -1,8 +1,7 @@
 Astromatic-Wrapper: Version 0.1
 ===============================
 
-This is the documentation for the Astroquery affiliated package of 
-`astropy <astropy.org>`_.
+This is the documentation for the Astromatic-Wrapper package.
 Code and issue tracker are on `GitHub <https://github.com/fred3m/astromatic_wrapper>`_.
 
 Introduction

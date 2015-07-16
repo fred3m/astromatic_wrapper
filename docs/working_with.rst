@@ -68,7 +68,7 @@ Load a FITS LDAC file
 To load a FITS_LDAC file::
 
     >>> import astromatic_wrapper as aw
-    >>> tbl = aw.utils.ldac.get_table_from_ldac('filename.fits', frame=1)
+    >>> tbl = aw.utils.ldac.get_table_from_ldac('filename.fits', frame=1) # doctest: +SKIP
 
 where a frame is required for a multi-extension FITS file that has multiple tables
 (for example the output from SExtractor). The frame to specify should be the *actual*
@@ -80,12 +80,12 @@ In some cases you might want to modify a table but save it as a FITS LDAC file t
 later be read into SCAMP or PSFex. To convert a table to a FITS LDAC hdulist use
 :func:`~atromatic_wrapper.utils.ldac.convert_table_to_ldac` ::
 
-    >>> hdulist = convert_table_to_ldac(tbl)
-    >>> hdulist.write('filename.ldac.fits')
+    >>> hdulist = aw.utils.convert_table_to_ldac(tbl) # doctest: +SKIP
+    >>> hdulist.write('filename.ldac.fits') # doctest: +SKIP
 
 or use simply use :func:`~atromatic_wrapper.utils.ldac.save_table_as_ldac` ::
 
-    >>> aw.utils.ldac.save_table_as_ldac(tbl, 'filename.fits')
+    >>> aw.utils.ldac.save_table_as_ldac(tbl, 'filename.fits') # doctest: +SKIP
 
 SExtractor Tips
 ===============

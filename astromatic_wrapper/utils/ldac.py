@@ -68,10 +68,10 @@ def save_table_as_ldac(tbl, filename, **kwargs):
     filename: str
         Filename to save table
     kwargs:
-        Keyword arguments to pass to hdulist.write
+        Keyword arguments to pass to hdulist.writeto
     """
     hdulist = convert_table_to_ldac(tbl)
-    hdulist.write(filename, **kwargs)
+    hdulist.writeto(filename, **kwargs)
 
 def get_table_from_ldac(filename, frame=1):
     """

@@ -111,7 +111,7 @@ def check_path(path, auto_create=False):
 
 class Pipeline(object):
     def __init__(self, paths={}, pipeline_name=None,
-            steps=[], next_id=0, create_paths=False, **kwargs):
+            next_id=0, create_paths=False, **kwargs):
         """
         Parameters
         ----------
@@ -144,7 +144,7 @@ class Pipeline(object):
         """
         self.create_paths = create_paths
         self.name = pipeline_name
-        self.steps = steps
+        self.steps = []
         self.next_id = next_id
         self.run_steps = None
         self.run_warnings = None
@@ -310,8 +310,8 @@ class Pipeline(object):
             # ignore_exceptions parameter to determine whether to 
             # stop the Pipeline's execution or warn the user and
             # continue
-            if ignore_exceptions or (ignore_exceptions is None and
-                    step.ignore_exceptions):
+            if (ignore_exceptions is not None and ignore_exceptions) or (
+                    ignore_exceptions is None and step.ignore_exceptions):
                 try:
                     result = step.func(**func_kwargs)
                 except Exception as error:
@@ -321,11 +321,12 @@ class Pipeline(object):
                     warnings.warn(warning_str)
                     result = {
                         'status': 'error', 
-                        'error': traceback.format_exec()
+                        'error': traceback.format_exc()
                     }
             else:
                 result = step.func(**func_kwargs)
             
+            step.results = result
             # Check that the result is a dictionary with a 'status' key
             if result is None or not isinstance(result, dict) or 'status' not in result:
                 warning_str = "Step {0} (run_step_idx {1}) did not return a valid result".format(

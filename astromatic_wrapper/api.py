@@ -595,6 +595,7 @@ class Astromatic:
         
         # For each frame, modify the command to include the frames and run the code
         all_warnings = None
+        result = {'status': 'success'}
         for frame in frames:
             new_cmd = this_cmd
             frame_str = '['+str(frame)+']'
@@ -612,22 +613,20 @@ class Astromatic:
                 new_cmd = new_cmd.replace(xml_name, xml_name.replace(
                     '.xml', '-'+str(frame)+'.xml'))
             # Run the code
-            result = self._run_cmd(new_cmd, False, xml_name, raise_error, frame=str(frame))
+            frame_result = self._run_cmd(new_cmd, False, xml_name, raise_error, frame=str(frame))
             
             # Combine all warnings into a single table
-            if 'warnings' in result and len(result['warnings'])>0:
+            if 'warnings' in frame_result and len(frame_result['warnings'])>0:
                 from astropy.table import vstack
-                warnings = result['warnings']
+                warnings = frame_result['warnings']
                 warnings['frame'] = frame
                 if all_warnings is None:
                     all_warnings = warnings
                 else:
                     all_warnings = vstack([all_warnings, warnings])
-        
-        result = {
-            'status': 'success',
-            'warnings': all_warnings
-        }
+            if frame_result['status'] != 'success':
+                result.update(frame_result)
+        result['warnings'] = all_warnings
         return result
     
     def get_version(self, cmd=None):
@@ -659,7 +658,7 @@ class Astromatic:
             cmd += ' '
         cmd += '-v'
         try:
-            p = subprocess.Popen('sex', shell=True, stdout=subprocess.PIPE, 
+            p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, 
                 stderr=subprocess.STDOUT)
         except:
             raise AstromaticError("Unable to run '{0}'. "

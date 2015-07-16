@@ -160,7 +160,7 @@ entered the code from :ref:`pipeline_setup` above. ::
 
 Now you can run the step with::
 
-    >>> pipeline.run()
+    >>> pipeline.run() # doctest: +SKIP
     > WARNING: default.sex not found, using internal defaults
 
     ----- SExtractor 2.19.5 started on 2015-07-08 at 15:46:12 with 1 thread
@@ -370,7 +370,7 @@ Running the Entire Pipeline
 ---------------------------
 To run all of the steps in a Pipeline in order simply type::
 
-    >>> pipeline.run()
+    >>> pipeline.run() # doctest: +SKIP
 
 .. _run_subset:
 
@@ -386,18 +386,18 @@ In :ref:`full_pipeline_example` above each step was given a set of tags in the f
 ``[step_name, code_name]``, for example the first three steps had the tag 
 ``['step1', 'SExtractor]``. To run only those steps run::
 
-    >>> pipeline.run(['step1'])
+    >>> pipeline.run(['step1']) # doctest: +SKIP
 
 or
 
-    >>> pipeline.run(run_tags=['step1])
+    >>> pipeline.run(run_tags=['step1]) # doctest: +SKIP
 
 which will only run the first three steps which detect sources in the given images.
 
 Instead of specifying tags to run, you might also want to specify tags not to run, for example
 maybe you want to skip the last step that saves the files to a new directory::
 
-    >>> pipeline.run(ignore_tags=['step7'])
+    >>> pipeline.run(ignore_tags=['step7']) # doctest: +SKIP
 
 which will run every step except the last.
 
@@ -411,14 +411,14 @@ Sometimes the simplistic selection of tags may not be sufficient and you may wan
 customize the subset of steps that you will run. In this case you can generate a list
 of steps yourself, for example::
 
-    >>> steps = [step for step in pipeline.steps if 'SExtractor' in step.tags and '206401.fits' == step.func_kwargs['files']['image']]
+    >>> steps = [step for step in pipeline.steps if 'SExtractor' in step.tags and '206401.fits' == step.func_kwargs['files']['image']] # doctest: +SKIP
 
 Which really just selects the step that ran SExtractor on the image '206401.fits' 
 (of course this is not the best way to run SExtractor on a single image).
 
 Then to run the chosen steps in the pipeline:
 
-    >>> pipeline.run(run_steps=steps)
+    >>> pipeline.run(run_steps=steps) # doctest: +SKIP
 
 Editing a Step
 --------------
@@ -436,12 +436,12 @@ case of a broken Pipeline, the step that threw the error.
 
 To change the filename in ``Pipeline.steps`` we use::
 
-    >>> idx = pipeline.run_steps[pipeline.run_step_idx]
-    >>> pipeline.steps[idx].func_kwargs['api_kwargs']['files'] = {'image': '206400.fits'}
+    >>> idx = pipeline.run_steps[pipeline.run_step_idx] # doctest: +SKIP
+    >>> pipeline.steps[idx].func_kwargs['api_kwargs']['files'] = {'image': '206400.fits'} # doctest: +SKIP
 
 and see that this changed the run step::
 
-    >>> pipeline.run_steps[pipeline.run_step_idx].func_kwargs['api_kwargs']['files']['image']
+    >>> pipeline.run_steps[pipeline.run_step_idx].func_kwargs['api_kwargs']['files']['image'] # doctest: +SKIP
     206400.fits
 
 .. _resume_pipeline:
@@ -452,11 +452,11 @@ Once we have made changes to a step or fixed whatever connectivity or file I/O e
 caused our pipeline to break, we are ready to resume our pipeline. To simply pickup at the
 same step we left off in we can run::
 
-    >>> pipeline.run(resume=True)
+    >>> pipeline.run(resume=True) # doctest: +SKIP
 
 If instead we need to skip a step (for whatever reason) we can specify the step to start on
 
-    >>> pipeline.run(resume=True, start_idx=5)
+    >>> pipeline.run(resume=True, start_idx=5) # doctest: +SKIP
 
 .. _warning::
 
@@ -485,9 +485,9 @@ serialization package. This allows you to load the pipeline in the exact state i
 in before running the step that caused it to crash. To load a saved pipeline::
 
     >>> import dill
-    >>> pipeline=dill.load('/path/to/log/pipeline.p')
+    >>> pipeline=dill.load('/path/to/log/pipeline.p') # doctest: +SKIP
 
 where `/path/to/log` is the directory ``pipeline.paths['log']``. Then just
 follow the steps in :ref:`resume_pipeline` to continue, for example::
 
-    >>> pipeline.run(resume=True)
+    >>> pipeline.run(resume=True) # doctest: +SKIP

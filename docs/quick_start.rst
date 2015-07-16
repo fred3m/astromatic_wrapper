@@ -34,7 +34,7 @@ FITS images. The following example assumes that you have a fits file named 'my_i
 First you need to import the astromatic_wrapper package and define your files::
 
     >>> import astromatic_wrapper as aw
-    >>> files = {'image': 'my_img.fits}
+    >>> files = {'image': 'my_img.fits'}
 
 If you have a data quality mask or weight map you can also add them::
 
@@ -50,7 +50,7 @@ and their command line name enter::
 
 In this case we use::
 
-    >>> kwargs = {'code': 'SExtractor}
+    >>> kwargs = {'code': 'SExtractor'}
 
 If you are running an AstrOmatic code that is not a system wide install, you can change the
 command used to execute the code by setting::
@@ -63,7 +63,7 @@ config.scamp for SCAMP, etc.). For this example we won't specify a config file s
 SExtractor will just use its internal default. If we have our own config file we can 
 instruct SExtractor (or any other astromatic code) to use it by entering::
 
-    >>> kwargs['config_file']: 'config.sex'
+    >>> kwargs['config_file'] = 'config.sex'
 
 It can be useful to change certain parameters in a config
 file so SExtractor allows the user to pass command line arguments using the 'config' key,
@@ -101,7 +101,7 @@ To create an :class:`.Astromatic` object that will run the code we type
 
 To run sextractor on a single frame::
 
-    >>> sextractor.run_frames(files['image'], frames=[1])
+    >>> sextractor.run_frames(files['image'], frames=[1]) # doctest: +SKIP
     > WARNING: default.sex not found, using internal defaults
 
     ----- SExtractor 2.19.5 started on 2015-07-08 at 15:46:12 with 1 thread
@@ -120,7 +120,7 @@ To run sextractor on a single frame::
 
 To run SExtractor on an entire image::
 
-    >>> sextractor.run(files['image'])
+    >>> sextractor.run(files['image']) # doctest: +SKIP
     (output suppressed)
 
 .. note::
@@ -161,8 +161,8 @@ Putting it all together we have::
 
 Now we can open the data as an astropy table using::
 
-    >>> catalog = aw.utils.ldac.get_table_from_ldac('test.ldac.fits')
-    >>> catalog
+    >>> catalog = aw.utils.ldac.get_table_from_ldac('test.ldac.fits') # doctest: +SKIP
+    >>> catalog # doctest: +SKIP
     NUMBER EXT_NUMBER   XWIN_WORLD    YWIN_WORLD   MAG_AUTO
                            deg           deg         mag   
     ------ ---------- ------------- -------------- --------

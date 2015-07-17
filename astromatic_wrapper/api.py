@@ -256,11 +256,7 @@ def run_psfex(pipeline, step_id, catalogs, api_kwargs={}):
     return result
 
 class AstromaticError(Exception):
-    def __init__(self,msg):
-        self.msg=msg
-        self.traceback=traceback.format_exc()
-    def __str__(self):
-        return self.traceback+'\n'+self.msg+'\n'
+    pass
 
 class Astromatic:
     """

@@ -8,6 +8,7 @@ import os
 import logging
 import warnings
 import traceback
+from collections import OrderedDict
 
 logger = logging.getLogger('astromatic.api')
 
@@ -69,7 +70,7 @@ def run_sex(pipeline, step_id, files, api_kwargs={}, frames=[]):
     if 'temp_path' not in api_kwargs:
         api_kwargs['temp_path'] = pipeline.paths['temp']
     if 'config' not in api_kwargs:
-        api_kwargs['config'] = {}
+        api_kwargs['config'] = OrderedDict()
     if 'CATALOG_NAME' not in api_kwargs['config']:
         api_kwargs['config']['CATALOG_NAME'] = files['image'].replace('.fits', '.cat')
     if 'FLAG_IMAGE' not in api_kwargs['config'] and 'dqmask' in files:
@@ -130,7 +131,7 @@ def run_scamp(pipeline, step_id, catalogs, api_kwargs={}, save_catalog=None):
     if 'temp_path' not in api_kwargs:
         api_kwargs['temp_path'] = pipeline.paths['temp']
     if 'config' not in api_kwargs:
-        api_kwargs['config'] = {}
+        api_kwargs['config'] = OrderedDict()
     if save_catalog is not None:
         api_kwargs['config']['SAVE_REFCATALOG'] = 'Y'
         api_kwargs['config']['REFOUT_CATPATH'] = save_catalog
@@ -185,7 +186,7 @@ def run_swarp(pipeline, step_id, filenames, api_kwargs, frames=[]):
     if 'temp_path' not in api_kwargs:
         api_kwargs['temp_path'] = pipeline.paths['temp']
     if 'config' not in api_kwargs:
-        api_kwargs['config'] = {}
+        api_kwargs['config'] = OrderedDict()
     if 'RESAMPLE_DIR' not in api_kwargs['config']:
         api_kwargs['config']['RESAMPLE_DIR'] = api_kwargs['temp_path']
     #if 'IMAGEOUT_NAME' not in api_kwargs['config']:
@@ -241,7 +242,7 @@ def run_psfex(pipeline, step_id, catalogs, api_kwargs={}):
     if 'temp_path' not in api_kwargs:
         api_kwargs['temp_path'] = pipeline.paths['temp']
     if 'config' not in api_kwargs:
-        api_kwargs['config'] = {}
+        api_kwargs['config'] = OrderedDict()
     if 'PSF_DIR' not in api_kwargs['config']:
         api_kwargs['config']['PSF_DIR'] = pipeline.paths['temp']
     if 'log' in pipeline.paths:

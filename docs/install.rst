@@ -6,7 +6,7 @@ Install
 
 Requirements
 ============
-- `Astropy <https://www.python.org/>`_ 0.4 or later
+- `Astropy <https://www.astropy.org/>`_ 0.4 or later
 - `six <https://pypi.python.org/pypi/six>`_
 
 Installing Astromatic-Wrapper

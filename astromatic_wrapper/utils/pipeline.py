@@ -275,7 +275,7 @@ class Pipeline(object):
             try:
                 import dill
                 dill_dump=True
-                dill.dump(self, open(logfile, 'w'))
+                dill.dump(self, open(logfile, 'wb'))
             except ImportError:
                 warnings.warn('Pipeline requires "dill" package to save log file')
         # If the user specifies a starting index use it, otherwise start at the 
@@ -346,7 +346,7 @@ class Pipeline(object):
             # Increase the run_step_idx and save the pipeline
             self.run_step_idx+=1
             if dill_dump:
-                dill.dump(self, open(logfile, 'w'))
+                dill.dump(self, open(logfile, 'wb'))
         result = {
             'status': 'success',
             'warnings': self.get_result_table('warnings', ['filename'])

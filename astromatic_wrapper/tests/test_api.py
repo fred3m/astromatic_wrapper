@@ -141,6 +141,7 @@ def test_run_sex(tmpdir):
         'log': os.path.join(str(tmpdir), 'log')
     }
     setattr(builtins,'raw_input', mock_raw_input('y'))
+    setattr(builtins,'input', mock_raw_input('y'))
     pipe = pipeline.Pipeline(paths=paths, build_paths = {})
     files = {
         'image': 'img.fits',
@@ -189,6 +190,7 @@ def test_run_scamp(tmpdir):
         'log': os.path.join(str(tmpdir), 'log')
     }
     setattr(builtins,'raw_input', mock_raw_input('y'))
+    setattr(builtins,'input', mock_raw_input('y'))
     pipe = pipeline.Pipeline(paths=paths, build_paths = {})
     result = api.run_scamp(pipe,0,['cat1.fits','cat2.fits'], {}, 'new_cat.fits')
     cmd = 'scamp cat1.fits cat2.fits -SAVE_REFCATALOG Y -REFOUT_CATPATH new_cat.fits '
@@ -210,6 +212,7 @@ def test_run_swarp(tmpdir):
         'log': os.path.join(str(tmpdir), 'log')
     }
     setattr(builtins,'raw_input', mock_raw_input('y'))
+    setattr(builtins,'input', mock_raw_input('y'))
     pipe = pipeline.Pipeline(paths=paths, build_paths = {})
     result = api.run_swarp(pipe,0,['img1.fits','img2.fits'], {})
     cmd = 'swarp img1.fits img2.fits -RESAMPLE_DIR {0} '.format(paths['temp'])
@@ -246,6 +249,7 @@ def test_run_psfex(tmpdir):
         'log': os.path.join(str(tmpdir), 'log')
     }
     setattr(builtins,'raw_input', mock_raw_input('y'))
+    setattr(builtins,'input', mock_raw_input('y'))
     pipe = pipeline.Pipeline(paths=paths, build_paths = {})
     result = api.run_psfex(pipe,0,['cat1.fits','cat2.fits'], {})
     cmd = 'psfex cat1.fits cat2.fits -PSF_DIR {0} '.format(paths['temp'])

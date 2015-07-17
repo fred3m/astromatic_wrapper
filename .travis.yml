@@ -89,7 +89,7 @@ install:
     # install since this ensures Numpy does not get automatically upgraded.
     # - if [[ $SETUP_CMD != egg_info ]]; then $CONDA_INSTALL numpy=$NUMPY_VERSION ... ; fi
     # - if [[ $SETUP_CMD != egg_info ]]; then $PIP_INSTALL ...; fi
-     - if [[ $SETUP_CMD != egg_info ]]; then $CONDA_INSTALL dill ; fi
+    - if [[ $SETUP_CMD != egg_info ]]; then $CONDA_INSTALL dill ; fi
 
     # DOCUMENTATION DEPENDENCIES
     # build_sphinx needs sphinx and matplotlib (for plot_directive). Note that
@@ -107,4 +107,4 @@ after_success:
     # If coveralls.io is set up for this package, uncomment the line
     # below and replace "packagename" with the name of your package.
     # The coveragerc file may be customized as needed for your package.
-     - if [[ $SETUP_CMD == 'test --coverage' ]]; then coveralls --rcfile='astrometry_wrapper/tests/coveragerc'; fi
+     - if [[ $SETUP_CMD == 'test --coverage' ]]; then coveralls --rcfile='astromatic_wrapper/tests/coveragerc'; fi

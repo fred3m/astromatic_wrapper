@@ -166,7 +166,7 @@ class TestPipeline:
         
         with pytest.raises(pipeline.PipelineError):
             pipe.run()
-        pipe = dill.load(open(os.path.join(paths['log'], 'pipeline.p')))
+        pipe = dill.load(open(os.path.join(paths['log'], 'pipeline.p'), 'rb'))
         assert pipe.run_step_idx==2
         assert pipe.steps[0].results=={'next_id': 4, 'status': 'success', 'step_id': 0, 'sum': 7}
         
@@ -175,7 +175,7 @@ class TestPipeline:
                 step.results = None
             pipe.run(resume=True, ignore_errors=True)
         
-        new_pipe = dill.load(open(os.path.join(paths['log'], 'pipeline.p')))
+        new_pipe = dill.load(open(os.path.join(paths['log'], 'pipeline.p'), 'rb'))
         result = new_pipe.run(start_idx=1, ignore_errors=True, ignore_exceptions=True)
         assert result['status']=='success'
         assert new_pipe.steps[0].results==None

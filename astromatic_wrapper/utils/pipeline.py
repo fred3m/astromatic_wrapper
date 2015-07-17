@@ -4,7 +4,6 @@
 Class and functions to define an astronomy pipeline
 """
 import os
-import numpy as np
 import subprocess
 import copy
 import logging

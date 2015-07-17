@@ -4,7 +4,6 @@ import os
 from astropy.io import fits
 from astropy.table import Table
 from astropy.tests.helper import pytest
-import numpy as np
 import dill
 
 from astromatic_wrapper.utils import pipeline

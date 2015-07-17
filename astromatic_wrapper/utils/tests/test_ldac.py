@@ -2,11 +2,11 @@ import os
 from astropy.io import fits
 from astropy.table import Table
 from astropy.tests.helper import pytest
-import numpy as np
 
 from astromatic_wrapper.utils import ldac
 
 def setup_module(module):
+    import numpy as np
     module.tbl_data =[
         np.array([(220.59332925263806, 0.7538374873328122, -9.60145092010498),
             (220.5778728622028, 0.7502730046087462, -12.5360689163208),

@@ -74,7 +74,7 @@ def create_paths(paths):
         If paths is a string, this is the path to search for and create. 
         If paths is a list, each one is a path to search for and create
     """
-    from six import string_types
+    from astropy.extern.six import string_types
     if isinstance(paths, string_types):
         paths=[paths]
     for path in paths:

@@ -106,8 +106,7 @@ setup(name=PACKAGENAME,
       scripts=scripts,
       install_requires=[
           'astropy>1.0', 
-          'numpy>=1.6.0',
-          'six'
+          'numpy>=1.6.0'
       ],
       extras_require={
           'all': ['dill']

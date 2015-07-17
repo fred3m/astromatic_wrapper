@@ -5,7 +5,7 @@ else:
     import __builtin__ as builtins
 import os
 import subprocess
-import six
+from astropy.extern import six
 import copy
 from astropy.tests.helper import pytest
 from collections import OrderedDict

@@ -8,7 +8,6 @@ import os
 from astropy.io import fits
 from astropy.table import Table
 from astropy.tests.helper import pytest
-import dill
 
 from astromatic_wrapper.utils import pipeline
 
@@ -152,6 +151,7 @@ class TestPipeline:
         assert pipe.steps[3].results['status']=='error'
     
     def test_run_advanced(self, tmpdir):
+        import dill
         temp_path = os.path.join(str(tmpdir), 'temp')
         log_path = os.path.join(str(tmpdir), 'log')
         paths = {

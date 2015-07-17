@@ -20,8 +20,8 @@ See the full `documentation`_ for more information.
 Status reports for developers
 -----------------------------
 
-.. image:: https://travis-ci.org/astropy/package-template.png?branch=master
-    :target: https://travis-ci.org/astropy/package-template
+.. image:: https://travis-ci.org/fred3m/astromatic_wrapper.png?branch=master
+    :target: https://travis-ci.org/fred3m/astromatic_wrapper
     :alt: Test Status
 
 .. image:: https://coveralls.io/repos/fred3m/astromatic_wrapper/badge.svg?branch=master&service=github 

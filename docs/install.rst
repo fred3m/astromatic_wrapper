@@ -7,7 +7,11 @@ Install
 Requirements
 ============
 - `Astropy <https://www.astropy.org/>`_ 0.4 or later
-- `six <https://pypi.python.org/pypi/six>`_
+
+Optional Requirements
+---------------------
+- `dill <https://pypi.python.org/pypi/dill>`_: Python serialization necessary for saving the
+  current state of an executing Pipeline
 
 Installing Astromatic-Wrapper
 =============================
@@ -55,8 +59,8 @@ navigate to the root directory of the source code and type::
 
     python setup.py install
 
-To install all of the required and optional dependencies navigate to the root directory of the
-source code and type ::
+To install all of the required and optional dependencies (currently only dill) navigate 
+to the root directory of the source code and type ::
 
     pip install -e .[all]
 

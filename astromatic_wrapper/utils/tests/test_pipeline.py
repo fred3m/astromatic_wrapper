@@ -23,10 +23,10 @@ def test_str_2_bool(bool_str, bool_val):
     assert pipeline.str_2_bool(bool_str)==bool_val
 
 def test_check_path(tmpdir):
-    setattr(__builtin__,'raw_input', mock_raw_input('y'))
+    setattr(builtins,'raw_input', mock_raw_input('y'))
     setattr(builtins,'input', mock_raw_input('y'))
     pipeline.check_path(os.path.join(str(tmpdir), 'path1'))
-    setattr(__builtin__,'raw_input', mock_raw_input('n'))
+    setattr(builtins,'raw_input', mock_raw_input('n'))
     setattr(builtins,'input', mock_raw_input('n'))
     with pytest.raises(pipeline.PipelineError):
         pipeline.check_path(os.path.join(str(tmpdir), 'path2'))

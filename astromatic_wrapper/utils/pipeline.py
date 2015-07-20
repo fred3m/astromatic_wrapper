@@ -277,7 +277,14 @@ class Pipeline(object):
                 dill_dump=True
                 dill.dump(self, open(logfile, 'wb'))
             except ImportError:
-                warnings.warn('Pipeline requires "dill" package to save log file')
+                warnings.warn(
+                    'Pipeline requires "dill" package to save log file. '
+                    'Attempting to use pickle')
+                import pickle
+                try:
+                    pickle.dump(self, open(logfile, 'wb'))
+                except:
+                    warnings.warn('Unable to dump using pickle, no log file will be saved')
         # If the user specifies a starting index use it, otherwise start at the 
         # first step unless the user specified to resume where it left off
         if start_idx is not None:
@@ -347,6 +354,12 @@ class Pipeline(object):
             self.run_step_idx+=1
             if dill_dump:
                 dill.dump(self, open(logfile, 'wb'))
+            else:
+                try:
+                    import pickle
+                    pickle.dump(self, open(logfile, 'wb'))
+                except:
+                    warnings.warn('Unable to dump using pickle, no log file will be saved')
         result = {
             'status': 'success',
             'warnings': self.get_result_table('warnings', ['filename'])

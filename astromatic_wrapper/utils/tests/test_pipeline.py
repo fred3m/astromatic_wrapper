@@ -9,6 +9,7 @@ try:
     HAS_DILL = True
 except:
     HAS_DILL = False
+    import pickle as dill
 import os
 from astropy.io import fits
 from astropy.table import Table
@@ -155,7 +156,6 @@ class TestPipeline:
         assert pipe.steps[2].results==None
         assert pipe.steps[3].results['status']=='error'
     
-    @pytest.mark.skipif('not HAS_DILL')
     def test_run_advanced(self, tmpdir):
         temp_path = os.path.join(str(tmpdir), 'temp')
         log_path = os.path.join(str(tmpdir), 'log')

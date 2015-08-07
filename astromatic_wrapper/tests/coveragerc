@@ -1,16 +1,16 @@
 [run]
-source = {packagename}
+source = astromatic_wrapper
 omit =
-   {packagename}/_astropy_init*
-   {packagename}/conftest*
-   {packagename}/cython_version*
-   {packagename}/setup_package*
-   {packagename}/*/setup_package*
-   {packagename}/*/*/setup_package*
-   {packagename}/tests/*
-   {packagename}/*/tests/*
-   {packagename}/*/*/tests/*
-   {packagename}/version*
+   astromatic_wrapper/_astropy_init*
+   astromatic_wrapper/conftest*
+   astromatic_wrapper/cython_version*
+   astromatic_wrapper/setup_package*
+   astromatic_wrapper/*/setup_package*
+   astromatic_wrapper/*/*/setup_package*
+   astromatic_wrapper/tests/*
+   astromatic_wrapper/*/tests/*
+   astromatic_wrapper/*/*/tests/*
+   astromatic_wrapper/version*
 
 [report]
 exclude_lines =
